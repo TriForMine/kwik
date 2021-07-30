@@ -1,0 +1,11 @@
+name: Kwik
+description: Kwik is a deno database using messagepack files.
+version: v1.0.1
+stable: true
+entry: mod.ts
+repository: 'https://github.com/Skillz4Killz/Sabr'
+files:
+  - ./**/*.ts
+  - README.md
+checkAll: false
+unlisted: false
