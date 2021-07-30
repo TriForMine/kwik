@@ -1,92 +1,104 @@
-import { msgpack, exists } from "./deps.ts";
-import {Kwik} from "./kwik.ts";
+import { exists, msgpack } from "./deps.ts";
+import { Kwik } from "./kwik.ts";
 
 export class KwikTable<T> {
-    private tableName: string;
-    private kwik: Kwik;
+  private tableName: string;
+  private kwik: Kwik;
 
-    constructor(kwik: Kwik, tableName: string) {
-        this.kwik = kwik;
-        this.tableName = tableName;
+  constructor(kwik: Kwik, tableName: string) {
+    this.kwik = kwik;
+    this.tableName = tableName;
 
-        this.kwik.tables.set(tableName, this);
+    this.kwik.tables.set(tableName, this);
+  }
+
+  /** Saves the provided document as a file */
+  private async saveFile(id: string, data: Partial<T>) {
+    return Deno.writeFile(
+      `${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
+      msgpack.encode(data, { extensionCodec: this.kwik.msgpackExtensionCodec }),
+    );
+  }
+
+  /** Create a document with the provided data */
+  async create(id: string, data: T) {
+    if (await this.has(id)) {
+      return this.kwik.error(
+        `[Kwik: create] Cannot create already existing file file://${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
+      );
     }
+    return this.saveFile(id, data);
+  }
 
-    /** Saves the provided document as a file */
-    private async saveFile(id: string, data: Partial<T>) {
-        return Deno.writeFile(`${this.kwik.directoryPath}${this.tableName}/${id}.kwik`, msgpack.encode(data, {extensionCodec: this.kwik.msgpackExtensionCodec}))
+  /** Check if a document exists */
+  async has(id: string): Promise<boolean> {
+    return await exists(
+      `${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
+    );
+  }
+
+  /** Get a document from the table. */
+  async get(id: string): Promise<T | undefined> {
+    try {
+      const data = await Deno.readFile(
+        `${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
+      );
+      return msgpack.decode<T>(data, {
+        extensionCodec: this.kwik.msgpackExtensionCodec,
+      });
+    } catch (error) {
+      await this.kwik.error(
+        `[Kwik: get] Unable to read file file://${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
+        error,
+      );
     }
+  }
 
-    /** Create a document with the provided data */
-    async create(id: string, data: T) {
-        if (await this.has(id)) {
-            return this.kwik.error(`[Kwik: create] Cannot create already existing file file://${this.kwik.directoryPath}${this.tableName}/${id}.kwik`);
+  /** Get all documents of the table. */
+  async getAll(): Promise<Map<string, T>> {
+    const data = new Map<string, T>();
+
+    for await (
+      const file of Deno.readDir(
+        Deno.realPathSync(`${this.kwik.directoryPath}${this.tableName}`),
+      )
+    ) {
+      if (!file.name || !file.isFile) continue;
+
+      try {
+        const name = file.name.substring(0, file.name.lastIndexOf("."));
+        const decodedData = await this.get(name);
+        if (decodedData) {
+          data.set(name, decodedData);
         }
-        return this.saveFile(id, data);
+      } catch (error) {
+        this.kwik.error(
+          `[Kwik: getAll]: Unable to read file ${this.kwik.directoryPath}${this.tableName}/${file.name}`,
+          error,
+        );
+      }
     }
 
-    /** Check if a document exists */
-    async has(id: string): Promise<boolean> {
-        return await exists(`${this.kwik.directoryPath}${this.tableName}/${id}.kwik`);
+    return data;
+  }
+
+  /** Set a document data. */
+  async set(id: string, data: T) {
+    return this.saveFile(id, data);
+  }
+
+  /** Deletes a document from the table. */
+  async delete(id: string): Promise<boolean> {
+    try {
+      await Deno.remove(
+        `${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
+      );
+      return true;
+    } catch (e) {
+      await this.kwik.error(
+        `[Kwik: delete]: Unable to delete file ${this.kwik.directoryPath}${this.tableName}/${id}.json`,
+      );
+      return false;
     }
-
-    /** Get a document from the table. */
-    async get(id: string): Promise<T | undefined> {
-        try {
-            const data = await Deno.readFile(
-                `${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
-            );
-            return msgpack.decode<T>(data, {extensionCodec: this.kwik.msgpackExtensionCodec});
-        } catch (error) {
-            await this.kwik.error(
-                `[Kwik: get] Unable to read file file://${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
-                error,
-            );
-        }
-    }
-
-    /** Get all documents of the table. */
-    async getAll(): Promise<Map<string, T>> {
-        const data = new Map<string, T>();
-
-        for await (
-            const file of Deno.readDir(
-            Deno.realPathSync(`${this.kwik.directoryPath}${this.tableName}`),
-        )
-            ) {
-            if (!file.name || !file.isFile) continue;
-
-            try {
-                const name = file.name.substring(0, file.name.lastIndexOf("."));
-                const decodedData = await this.get(name);
-                if(decodedData)
-                    data.set(name, decodedData);
-            } catch (error) {
-                this.kwik.error(
-                    `[Kwik: getAll]: Unable to read file ${this.kwik.directoryPath}${this.tableName}/${file.name}`,
-                    error,
-                );
-            }
-        }
-
-        return data;
-    }
-
-    /** Set a document data. */
-    async set(id: string, data: T) {
-        return this.saveFile(id, data);
-    }
-
-    /** Deletes a document from the table. */
-    async delete(id: string): Promise<boolean> {
-        try {
-            await Deno.remove(`${this.kwik.directoryPath}${this.tableName}/${id}.kwik`);
-            return true;
-        } catch(e) {
-            await this.kwik.error(
-                `[Kwik: delete]: Unable to delete file ${this.kwik.directoryPath}${this.tableName}/${id}.json`
-            )
-            return false;
-        }
-    }
+  }
 }
