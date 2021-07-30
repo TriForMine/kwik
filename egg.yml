@@ -2,7 +2,7 @@ name: Kwik
 description: Kwik is a deno database using messagepack files.
 version: v1.0.3
 stable: true
-entry: mod.ts
+entry: ./mod.ts
 repository: 'https://github.com/TriForMine/kwik'
 files:
   - ./**/*.ts
@@ -12,3 +12,5 @@ ignore:
 checkFormat: deno fmt
 checkAll: false
 unlisted: false
+check: true
+homepage: ''

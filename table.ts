@@ -13,7 +13,7 @@ export class KwikTable<T> {
   }
 
   /** Saves the provided document as a file */
-  private async saveFile(id: string, data: Partial<T>) {
+  private saveFile(id: string, data: Partial<T>) {
     return Deno.writeFile(
       `${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
       msgpack.encode(data, { extensionCodec: this.kwik.msgpackExtensionCodec }),
@@ -83,7 +83,7 @@ export class KwikTable<T> {
   }
 
   /** Set a document data. */
-  async set(id: string, data: T) {
+  set(id: string, data: T) {
     return this.saveFile(id, data);
   }
 
@@ -94,9 +94,10 @@ export class KwikTable<T> {
         `${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
       );
       return true;
-    } catch (e) {
+    } catch (error) {
       await this.kwik.error(
         `[Kwik: delete]: Unable to delete file ${this.kwik.directoryPath}${this.tableName}/${id}.json`,
+        error,
       );
       return false;
     }

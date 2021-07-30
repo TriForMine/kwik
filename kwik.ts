@@ -20,6 +20,7 @@ export class Kwik {
     }
   }
 
+  // deno-lint-ignore no-explicit-any require-await
   async error(...data: any[]) {
     console.error(...data);
   }
