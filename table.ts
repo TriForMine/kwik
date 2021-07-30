@@ -63,7 +63,7 @@ export class KwikTable<T> {
                     data.set(name, decodedData);
             } catch (error) {
                 this.kwik.error(
-                    `[Sabr Error: getAll]: Unable to read file ${this.kwik.directoryPath}${this.tableName}/${file.name}`,
+                    `[Kwik: getAll]: Unable to read file ${this.kwik.directoryPath}${this.tableName}/${file.name}`,
                     error,
                 );
             }

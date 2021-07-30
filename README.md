@@ -22,7 +22,7 @@ await users.set(userId, {
     username: 'TriForMine',
     createdAt: new Date()
 });
-if (users.has(userId)) {
+if (await users.has(userId)) {
     const user = await users.get(userId);
     await users.delete(userId);
 } else {
