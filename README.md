@@ -7,7 +7,7 @@ Kwik is a deno database using messagepack files.
 # Examples
 
 ```ts
-import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.0.4/mod.ts";
+import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.0.5/mod.ts";
 
 interface UserSchema {
   username: string;
@@ -38,7 +38,7 @@ Here is an example to setup custom extension types for
 [msgpack](https://deno.land/x/msgpack_javascript@v2.7.0#extension-types)
 
 ```ts
-import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.0.4/mod.ts";
+import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.0.5/mod.ts";
 import { decode, encode } from "https://esm.sh/@msgpack/msgpack/mod.ts";
 
 const kwik = new Kwik();

@@ -13,8 +13,8 @@ export class KwikTable<T> {
   }
 
   /** Saves the provided document as a file */
-  private saveFile(id: string, data: Partial<T>) {
-    return Deno.writeFile(
+  private async saveFile(id: string, data: Partial<T>) {
+    return await Deno.writeFile(
       `${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
       msgpack.encode(data, { extensionCodec: this.kwik.msgpackExtensionCodec }),
     );
@@ -27,7 +27,7 @@ export class KwikTable<T> {
         `[Kwik: create] Cannot create already existing file file://${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
       );
     }
-    return this.saveFile(id, data);
+    return await this.saveFile(id, data);
   }
 
   /** Check if a document exists */
@@ -83,8 +83,8 @@ export class KwikTable<T> {
   }
 
   /** Set a document data. */
-  set(id: string, data: T) {
-    return this.saveFile(id, data);
+  async set(id: string, data: T) {
+    return await this.saveFile(id, data);
   }
 
   /** Deletes a document from the table. */
