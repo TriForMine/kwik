@@ -1,5 +1,7 @@
 # Kwik
 
+[![nest badge](https://nest.land/badge.svg)](https://nest.land/package/Kwik)
+
 Kwik is a deno database using messagepack files.
 
 # Examples
