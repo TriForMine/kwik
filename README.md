@@ -5,7 +5,7 @@ Kwik is a deno database using messagepack files.
 # Examples
 
 ```ts
-import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.0.3/mod.ts";
+import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.0.4/mod.ts";
 
 interface UserSchema {
   username: string;
@@ -24,7 +24,7 @@ await users.set(userId, {
 });
 if (await users.has(userId)) {
   const user = await users.get(userId);
-  await users.delete(userId);
+  console.log(user);
 } else {
   console.error("An error occurred, the user was not added to the database.");
 }
@@ -36,7 +36,7 @@ Here is an example to setup custom extension types for
 [msgpack](https://deno.land/x/msgpack_javascript@v2.7.0#extension-types)
 
 ```ts
-import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.0.3/mod.ts";
+import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.0.4/mod.ts";
 import { decode, encode } from "https://esm.sh/@msgpack/msgpack/mod.ts";
 
 const kwik = new Kwik();
