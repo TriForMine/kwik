@@ -83,7 +83,7 @@ export class KwikTable<T> {
   }
 
   /** Set a document data. */
-  async set(id: string, data: T) {
+  async set(id: string, data: Partial<T> = {}) {
     return await this.saveFile(id, data);
   }
 
