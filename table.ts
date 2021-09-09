@@ -177,7 +177,7 @@ export class KwikTable<T> {
   ) {
     for await (
       const file of Deno.readDir(
-        Deno.realPathSync(`${this.sabr.directoryPath}${this.name}`),
+        Deno.realPathSync(`${this.sabr.directoryPath}${this.tableName}`),
       )
     ) {
       if (!file.name || !file.isFile) continue;
@@ -224,7 +224,7 @@ export class KwikTable<T> {
     /** Deletes one document in a table that match a filter */
   async deleteOne(filter: Partial<T> | ((value: T) => boolean)) {
     const files = Deno.readDirSync(
-      Deno.realPathSync(`${this.sabr.directoryPath}${this.name}`),
+      Deno.realPathSync(`${this.sabr.directoryPath}${this.tableName}`),
     );
 
     for (const file of files) {
@@ -256,7 +256,7 @@ export class KwikTable<T> {
   /** Deletes all documents in a table that match a filter */
   async deleteMany(filter: Partial<T> | ((value: T) => boolean)) {
     const files = Deno.readDirSync(
-      Deno.realPathSync(`${this.sabr.directoryPath}${this.name}`),
+      Deno.realPathSync(`${this.sabr.directoryPath}${this.tableName}`),
     );
 
     for (const file of files) {
