@@ -40,8 +40,7 @@ Here is an example to setup custom extension types for
 [msgpack](https://deno.land/x/msgpack_javascript@v2.7.0#extension-types)
 
 ```ts
-import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.0.5/mod.ts";
-import { decode, encode } from "https://esm.sh/@msgpack/msgpack/mod.ts";
+import { Kwik, KwikTable, encode, decode } from "https://deno.land/x/kwik@v1.0.5/mod.ts";
 
 const kwik = new Kwik();
 const table = new KwikTable(kwik, "table");
@@ -65,4 +64,35 @@ kwik.msgpackExtensionCodec.register({
 await kwik.init();
 
 await table.set("test", new Map<string, string>());
+```
+
+# Handling BigInt
+```ts
+import { Kwik, KwikTable, encode, decode } from "https://deno.land/x/kwik@v1.0.5/mod.ts";
+
+const kwik = new Kwik();
+const table = new KwikTable(kwik, "table");
+
+// Add BigInt supports
+kwik.msgpackExtensionCodec.register({
+  type: 0,
+  encode: (object: unknown): Uint8Array => {
+    if (typeof input === "bigint") {
+      if (input <= Number.MAX_SAFE_INTEGER && input >= Number.MIN_SAFE_INTEGER) {
+        return encode(parseInt(input.toString(), 10));
+      } else {
+        return encode(input.toString());
+      }
+    } else {
+      return null;
+    }
+  },
+  decode: (data: Uint8Array) => {
+    return BigInt(decode(data));
+  },
+});
+
+await kwik.init();
+
+await table.set("test", 5n);
 ```
