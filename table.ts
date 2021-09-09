@@ -81,6 +81,84 @@ export class KwikTable<T> {
 
     return data;
   }
+  
+  /** Get all documents from a table that match a filter */
+  async findMany(
+    filter: Record<string, unknown> | ((value: T) => boolean),
+    returnArray?: false,
+  ): Promise<Map<string, T>>;
+  async findMany(
+    filter: Record<string, unknown> | ((value: T) => boolean),
+    returnArray?: true,
+  ): Promise<T[]>;
+  async findMany(
+    filter: Record<string, unknown> | ((value: T) => boolean),
+    returnArray = false,
+  ) {
+    const data = new Map<string, T>();
+
+    for await (
+      const file of Deno.readDir(
+        Deno.realPathSync(`${this.kwik.directoryPath}${this.tableName}`),
+      )
+    ) {
+      if (!file.name || !file.isFile) continue;
+
+      try {
+        const name = file.name.substring(0, file.name.lastIndexOf("."));
+        const decodedData = await this.get(name);
+        if (decodedData) {
+          if (typeof filter === "function") {
+            if (filter(decodedData)) data.set(name, decodedData);
+          } else {
+            const invalid = Object.keys(filter).find((key) =>
+              (decodedData as Record<string, unknown>)[key] !== filter[key]
+            );
+            if (!invalid) data.set(name, decodedData);
+          }
+        }
+      } catch (error) {
+        this.sabr.error(
+          `[Kwik Error: findMany]: Unable to read file ${this.kwik.directoryPath}${this.tableName}/${file.name}`,
+          error,
+        );
+      }
+    }
+
+    return returnArray ? [...data.values()] : data;
+  }
+
+  /** Gets the first document from a table that match a filter */
+  async findOne(filter: Record<string, unknown> | ((value: T) => boolean)) {
+    for await (
+      const file of Deno.readDir(
+        Deno.realPathSync(`${this.kwik.directoryPath}${this.tableName}`),
+      )
+    ) {
+      if (!file.name || !file.isFile) continue;
+
+      try {
+        // Substring remove the file type `.json` from file.name
+        const name = file.name.substring(0, file.name.lastIndexOf("."));
+        const decodedData = await this.get(name);
+        if (decodedData) {
+          if (typeof filter === "function") {
+            if (filter(decodedData)) return decodedData;
+          } else {
+            const invalid = Object.keys(filter).find((key) =>
+              (decodedData as Record<string, unknown>)[key] !== filter[key]
+            );
+            if (!invalid) return decodedData;
+          }
+        }
+      } catch (error) {
+        this.sabr.error(
+          `[Kwik Error: findOne]: Unable to read file ${this.kwik.directoryPath}${this.tableName}/${file.name}`,
+          error,
+        );
+      }
+    }
+  }
 
   /** Set a document data. */
   async set(id: string, data: Partial<T> = {}) {
