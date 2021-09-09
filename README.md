@@ -9,7 +9,7 @@ Based on: [sabr](https://deno.land/x/sabr)
 # Examples
 
 ```ts
-import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.0.9/mod.ts";
+import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.1.0/mod.ts";
 
 interface UserSchema {
   username: string;
@@ -45,7 +45,7 @@ import {
   encode,
   Kwik,
   KwikTable,
-} from "https://deno.land/x/kwik@v1.0.9/mod.ts";
+} from "https://deno.land/x/kwik@v1.1.0/mod.ts";
 
 const kwik = new Kwik();
 const table = new KwikTable(kwik, "table");
@@ -79,7 +79,7 @@ import {
   encode,
   Kwik,
   KwikTable,
-} from "https://deno.land/x/kwik@v1.0.9/mod.ts";
+} from "https://deno.land/x/kwik@v1.1.0/mod.ts";
 
 const kwik = new Kwik();
 const table = new KwikTable(kwik, "table");
