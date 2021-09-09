@@ -77,11 +77,11 @@ const table = new KwikTable(kwik, "table");
 kwik.msgpackExtensionCodec.register({
   type: 0,
   encode: (object: unknown): Uint8Array => {
-    if (typeof input === "bigint") {
-      if (input <= Number.MAX_SAFE_INTEGER && input >= Number.MIN_SAFE_INTEGER) {
-        return encode(parseInt(input.toString(), 10));
+    if (typeof object === "bigint") {
+      if (object <= Number.MAX_SAFE_INTEGER && object >= Number.MIN_SAFE_INTEGER) {
+        return encode(parseInt(object.toString(), 10));
       } else {
-        return encode(input.toString());
+        return encode(object.toString());
       }
     } else {
       return null;
