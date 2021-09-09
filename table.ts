@@ -90,7 +90,7 @@ export class KwikTable<T> {
   /** Updates a documents data. If this document does not exist, it will create the document. */
   async update(id: string, data: Partial<T> = {}) {
     const existing = await this.get(id) || {};
-    return this.set(id, existing ? { ...existing, ...data } : data);
+    return this.create(id, existing ? { ...existing, ...data } : data);
   }
 
   /** Deletes a document from the table. */
