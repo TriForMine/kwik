@@ -21,7 +21,7 @@ export class KwikTable<T> {
   }
 
   /** Create a document with the provided data */
-  async create(id: string, data: T) {
+  async create(id: string, data: Partial<T> = {}) {
     if (await this.has(id)) {
       return this.kwik.error(
         `[Kwik: create] Cannot create already existing file file://${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
