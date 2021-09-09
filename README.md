@@ -55,13 +55,13 @@ kwik.msgpackExtensionCodec.register({
   type: 1,
   encode: (object: unknown): Uint8Array | null => {
     if (object instanceof Map) {
-      return encode([...object]);
+      return encode([...object], {});
     } else {
       return new Uint8Array(0);
     }
   },
   decode: (data: Uint8Array) => {
-    const array = decode(data) as Array<[unknown, unknown]>;
+    const array = decode(data, {}) as Array<[unknown, unknown]>;
     return new Map(array);
   },
 });
@@ -98,7 +98,7 @@ kwik.msgpackExtensionCodec.register({
     }
   },
   decode: (data: Uint8Array) => {
-    return BigInt(decode(data));
+    return BigInt(decode(data, {}));
   },
 });
 
