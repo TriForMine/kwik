@@ -9,7 +9,7 @@ Based on: [sabr](https://deno.land/x/sabr)
 # Examples
 
 ```ts
-import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.0.8/mod.ts";
+import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.0.9/mod.ts";
 
 interface UserSchema {
   username: string;
@@ -45,7 +45,7 @@ import {
   encode,
   Kwik,
   KwikTable,
-} from "https://deno.land/x/kwik@v1.0.8/mod.ts";
+} from "https://deno.land/x/kwik@v1.0.9/mod.ts";
 
 const kwik = new Kwik();
 const table = new KwikTable(kwik, "table");
@@ -78,7 +78,7 @@ import {
   encode,
   Kwik,
   KwikTable,
-} from "https://deno.land/x/kwik@v1.0.8/mod.ts";
+} from "https://deno.land/x/kwik@v1.0.9/mod.ts";
 
 const kwik = new Kwik();
 const table = new KwikTable(kwik, "table");
@@ -89,9 +89,9 @@ kwik.msgpackExtensionCodec.register({
   encode: (object: unknown): Uint8Array | null => {
     if (typeof object === "bigint") {
       if (object <= Number.MAX_SAFE_INTEGER && object >= Number.MIN_SAFE_INTEGER) {
-        return encode(parseInt(object.toString(), 10));
+        return encode(parseInt(object.toString(), 10), {});
       } else {
-        return encode(object.toString());
+        return encode(object.toString(), {});
       }
     } else {
       return null;
