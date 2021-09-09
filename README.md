@@ -41,10 +41,10 @@ Here is an example to setup custom extension types for
 
 ```ts
 import {
+  decode,
+  encode,
   Kwik,
   KwikTable,
-  encode,
-  decode
 } from "https://deno.land/x/kwik@v1.0.8/mod.ts";
 
 const kwik = new Kwik();
@@ -74,10 +74,10 @@ await table.set("test", new Map<string, string>());
 # Handling BigInt
 ```ts
 import {
+  decode,
+  encode,
   Kwik,
   KwikTable,
-  encode,
-  decode
 } from "https://deno.land/x/kwik@v1.0.8/mod.ts";
 
 const kwik = new Kwik();
