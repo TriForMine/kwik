@@ -118,7 +118,7 @@ export class KwikTable<T> {
           }
         }
       } catch (error) {
-        this.sabr.error(
+        this.kwik.error(
           `[Kwik Error: findMany]: Unable to read file ${this.kwik.directoryPath}${this.tableName}/${file.name}`,
           error,
         );
@@ -152,7 +152,7 @@ export class KwikTable<T> {
           }
         }
       } catch (error) {
-        this.sabr.error(
+        this.kwik.error(
           `[Kwik Error: findOne]: Unable to read file ${this.kwik.directoryPath}${this.tableName}/${file.name}`,
           error,
         );
