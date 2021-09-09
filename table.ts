@@ -138,7 +138,6 @@ export class KwikTable<T> {
       if (!file.name || !file.isFile) continue;
 
       try {
-        // Substring remove the file type `.json` from file.name
         const name = file.name.substring(0, file.name.lastIndexOf("."));
         const decodedData = await this.get(name);
         if (decodedData) {
@@ -170,6 +169,41 @@ export class KwikTable<T> {
     const existing = await this.get(id) || {};
     return this.set(id, existing ? { ...existing, ...data } : data);
   }
+  
+  /** Gets the first document from a table that match a filter */
+  async updateOne(
+    filter: Partial<T> | ((value: T) => boolean),
+    data: Partial<T>,
+  ) {
+    for await (
+      const file of Deno.readDir(
+        Deno.realPathSync(`${this.sabr.directoryPath}${this.name}`),
+      )
+    ) {
+      if (!file.name || !file.isFile) continue;
+
+      try {
+        const name = file.name.substring(0, file.name.lastIndexOf("."));
+        const decodedData = await this.get(name);
+        if (decodedData) {
+          if (typeof filter === "function") {
+            if (filter(decodedData)) return this.update(name, data);
+          } else {
+            // deno-lint-ignore no-explicit-any
+            const invalid = Object.keys(filter).find((key) =>
+              (decodedData as Record<string, unknown>)[key] !== (filter as any)[key]
+            );
+            if (!invalid) return this.update(name, data);
+          }
+        }
+      } catch (error) {
+        this.kwik.error(
+          `[Kwik Error: updateOne]: Unable to read file ${this.kwik.directoryPath}${this.tableName}/${file.name}`,
+          error,
+        );
+      }
+    }
+  }
 
   /** Deletes a document from the table. */
   async delete(id: string): Promise<boolean> {
@@ -184,6 +218,70 @@ export class KwikTable<T> {
         error,
       );
       return false;
+    }
+  }
+  
+    /** Deletes one document in a table that match a filter */
+  async deleteOne(filter: Partial<T> | ((value: T) => boolean)) {
+    const files = Deno.readDirSync(
+      Deno.realPathSync(`${this.sabr.directoryPath}${this.name}`),
+    );
+
+    for (const file of files) {
+      if (!file.name || !file.isFile) continue;
+
+      try {
+        const name = file.name.substring(0, file.name.lastIndexOf("."));
+        const decodedData = await this.get(name);
+        if (decodedData) {
+          if (typeof filter === "function") {
+            return this.delete(name);
+          } else {
+            // deno-lint-ignore no-explicit-any
+            const invalid = Object.keys(filter).find((key) =>
+              (decodedData as Record<string, unknown>)[key] !== (filter as any)[key]
+            );
+            if (!invalid) return this.delete(name);
+          }
+        }
+      } catch (error) {
+        this.sabr.error(
+          `[Kwik Error: deleteMany]: Unable to read file ${this.kwik.directoryPath}${this.tableName}/${file.name}`,
+          error,
+        );
+      }
+    }
+  }
+
+  /** Deletes all documents in a table that match a filter */
+  async deleteMany(filter: Partial<T> | ((value: T) => boolean)) {
+    const files = Deno.readDirSync(
+      Deno.realPathSync(`${this.sabr.directoryPath}${this.name}`),
+    );
+
+    for (const file of files) {
+      if (!file.name || !file.isFile) continue;
+
+      try {
+        const name = file.name.substring(0, file.name.lastIndexOf("."));
+        const decodedData = await this.get(name);
+        if (decodedData) {
+          if (typeof filter === "function") {
+            this.delete(name);
+          } else {
+            // deno-lint-ignore no-explicit-any
+            const invalid = Object.keys(filter).find((key) =>
+              (decodedData as Record<string, unknown>)[key] !== (filter as any)[key]
+            );
+            if (!invalid) this.delete(name);
+          }
+        }
+      } catch (error) {
+        this.kwik.error(
+          `[Kwik Error: deleteMany]: Unable to read file ${this.kwik.directoryPath}${this.tableName}/${file.name}`,
+          error,
+        );
+      }
     }
   }
 }
