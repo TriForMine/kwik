@@ -9,7 +9,7 @@ Based on: [sabr](https://deno.land/x/sabr)
 # Examples
 
 ```ts
-import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.0.7/mod.ts";
+import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.0.8/mod.ts";
 
 interface UserSchema {
   username: string;
@@ -37,7 +37,7 @@ if (await users.has(userId)) {
 # Message Pack Customization
 
 Here is an example to setup custom extension types for
-[msgpack](https://deno.land/x/msgpack_javascript@v2.7.0#extension-types)
+[msgpack](https://deno.land/x/msgpack_javascript@v2.7.1#extension-types)
 
 ```ts
 import {
@@ -45,7 +45,7 @@ import {
   KwikTable,
   encode,
   decode
-} from "https://deno.land/x/kwik@v1.0.7/mod.ts";
+} from "https://deno.land/x/kwik@v1.0.8/mod.ts";
 
 const kwik = new Kwik();
 const table = new KwikTable(kwik, "table");
@@ -53,7 +53,7 @@ const table = new KwikTable(kwik, "table");
 // Add Map<T> supports
 kwik.msgpackExtensionCodec.register({
   type: 1,
-  encode: (object: unknown): Uint8Array => {
+  encode: (object: unknown): Uint8Array | null => {
     if (object instanceof Map) {
       return encode([...object]);
     } else {
@@ -78,7 +78,7 @@ import {
   KwikTable,
   encode,
   decode
-} from "https://deno.land/x/kwik@v1.0.7/mod.ts";
+} from "https://deno.land/x/kwik@v1.0.8/mod.ts";
 
 const kwik = new Kwik();
 const table = new KwikTable(kwik, "table");
@@ -86,7 +86,7 @@ const table = new KwikTable(kwik, "table");
 // Add BigInt supports
 kwik.msgpackExtensionCodec.register({
   type: 0,
-  encode: (object: unknown): Uint8Array => {
+  encode: (object: unknown): Uint8Array | null => {
     if (typeof object === "bigint") {
       if (object <= Number.MAX_SAFE_INTEGER && object >= Number.MIN_SAFE_INTEGER) {
         return encode(parseInt(object.toString(), 10));
