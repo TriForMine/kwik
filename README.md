@@ -9,7 +9,7 @@ Based on: [sabr](https://deno.land/x/sabr)
 # Examples
 
 ```ts
-import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.0.6/mod.ts";
+import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.0.7/mod.ts";
 
 interface UserSchema {
   username: string;
@@ -40,7 +40,7 @@ Here is an example to setup custom extension types for
 [msgpack](https://deno.land/x/msgpack_javascript@v2.7.0#extension-types)
 
 ```ts
-import { Kwik, KwikTable, encode, decode } from "https://deno.land/x/kwik@v1.0.6/mod.ts";
+import { Kwik, KwikTable, encode, decode } from "https://deno.land/x/kwik@v1.0.7/mod.ts";
 
 const kwik = new Kwik();
 const table = new KwikTable(kwik, "table");
@@ -68,7 +68,7 @@ await table.set("test", new Map<string, string>());
 
 # Handling BigInt
 ```ts
-import { Kwik, KwikTable, encode, decode } from "https://deno.land/x/kwik@v1.0.6/mod.ts";
+import { Kwik, KwikTable, encode, decode } from "https://deno.land/x/kwik@v1.0.7/mod.ts";
 
 const kwik = new Kwik();
 const table = new KwikTable(kwik, "table");
