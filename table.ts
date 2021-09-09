@@ -86,7 +86,7 @@ export class KwikTable<T> {
   async set(id: string, data: T) {
     return await this.saveFile(id, data);
   }
-  
+
   /** Updates a documents data. If this document does not exist, it will create the document. */
   async update(id: string, data: Partial<T> = {}) {
     const existing = await this.get(id) || {};
