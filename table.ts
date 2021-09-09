@@ -43,7 +43,7 @@ export class KwikTable<T> {
       const data = await Deno.readFile(
         `${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
       );
-      return msgpack.decode<T>(data, {
+      return msgpack.decode(data, {
         extensionCodec: this.kwik.msgpackExtensionCodec,
       });
     } catch (error) {
