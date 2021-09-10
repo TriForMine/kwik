@@ -6,6 +6,10 @@ Kwik is a deno database using messagepack files.
 
 Based on: [sabr](https://deno.land/x/sabr)
 
+# Warning
+This project was done mainly to experiment with [messagepack](http://msgpack.org/index.html) and files. This would never be as good as sql/nosql databases.
+It isn't recommended to use that module for production projects. Except if you know what you are doing, file database are slower and might have issues.
+
 # Examples
 
 ```ts
