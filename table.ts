@@ -191,7 +191,8 @@ export class KwikTable<T> {
           } else {
             // deno-lint-ignore no-explicit-any
             const invalid = Object.keys(filter).find((key) =>
-              (decodedData as Record<string, unknown>)[key] !== (filter as any)[key]
+              (decodedData as Record<string, unknown>)[key] !==
+                (filter as any)[key]
             );
             if (!invalid) return this.update(name, data);
           }
@@ -221,7 +222,7 @@ export class KwikTable<T> {
     }
   }
 
-    /** Deletes one document in a table that match a filter */
+  /** Deletes one document in a table that match a filter */
   async deleteOne(filter: Partial<T> | ((value: T) => boolean)) {
     const files = Deno.readDirSync(
       Deno.realPathSync(`${this.kwik.directoryPath}${this.tableName}`),
@@ -239,7 +240,8 @@ export class KwikTable<T> {
           } else {
             // deno-lint-ignore no-explicit-any
             const invalid = Object.keys(filter).find((key) =>
-              (decodedData as Record<string, unknown>)[key] !== (filter as any)[key]
+              (decodedData as Record<string, unknown>)[key] !==
+                (filter as any)[key]
             );
             if (!invalid) return this.delete(name);
           }
@@ -271,7 +273,8 @@ export class KwikTable<T> {
           } else {
             // deno-lint-ignore no-explicit-any
             const invalid = Object.keys(filter).find((key) =>
-              (decodedData as Record<string, unknown>)[key] !== (filter as any)[key]
+              (decodedData as Record<string, unknown>)[key] !==
+                (filter as any)[key]
             );
             if (!invalid) this.delete(name);
           }
