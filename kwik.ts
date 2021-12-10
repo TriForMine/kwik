@@ -25,7 +25,7 @@ export class Kwik {
     console.error(...data);
   }
 
-  /** Returns an UUID V4 string **/
+  /** Returns a UUID V4 string **/
   uuid4() {
     return uuid4();
   }

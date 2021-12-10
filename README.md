@@ -10,14 +10,14 @@ Based on: [sabr](https://deno.land/x/sabr)
 
 This project was done mainly to experiment with
 [messagepack](http://msgpack.org/index.html) and files. This would never be as
-good as sql/nosql databases. It isn't recommended to use that module for
+good as sql/nosql databases. It isn't recommended using that module for
 production projects. Except if you know what you are doing, file database are
 slower and might have issues.
 
 # Examples
 
 ```ts
-import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.1.0/mod.ts";
+import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.2.0/mod.ts";
 
 interface UserSchema {
   username: string;
@@ -44,7 +44,7 @@ if (await users.has(userId)) {
 
 # Message Pack Customization
 
-Here is an example to setup custom extension types for
+Here is an example to set up custom extension types for
 [msgpack](https://deno.land/x/msgpack_javascript@v2.7.1#extension-types)
 
 ```ts
@@ -53,7 +53,7 @@ import {
   encode,
   Kwik,
   KwikTable,
-} from "https://deno.land/x/kwik@v1.1.0/mod.ts";
+} from "https://deno.land/x/kwik@v1.2.0/mod.ts";
 
 const kwik = new Kwik();
 const table = new KwikTable(kwik, "table");
@@ -87,7 +87,7 @@ import {
   encode,
   Kwik,
   KwikTable,
-} from "https://deno.land/x/kwik@v1.1.0/mod.ts";
+} from "https://deno.land/x/kwik@v1.2.0/mod.ts";
 
 const kwik = new Kwik();
 const table = new KwikTable(kwik, "table");
@@ -109,7 +109,7 @@ kwik.msgpackExtensionCodec.register({
     }
   },
   decode: (data: Uint8Array) => {
-    return BigInt(decode(data, {}));
+    return BigInt(decode(data, {})) as string;
   },
 });
 

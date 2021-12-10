@@ -2,7 +2,7 @@ import { exists, msgpack } from "./deps.ts";
 import { Kwik } from "./kwik.ts";
 
 export class KwikTable<T> {
-  private tableName: string;
+  private readonly tableName: string;
   private kwik: Kwik;
 
   constructor(kwik: Kwik, tableName: string) {
@@ -72,7 +72,7 @@ export class KwikTable<T> {
           data.set(name, decodedData);
         }
       } catch (error) {
-        this.kwik.error(
+        await this.kwik.error(
           `[Kwik: getAll]: Unable to read file ${this.kwik.directoryPath}${this.tableName}/${file.name}`,
           error,
         );
@@ -118,7 +118,7 @@ export class KwikTable<T> {
           }
         }
       } catch (error) {
-        this.kwik.error(
+        await this.kwik.error(
           `[Kwik Error: findMany]: Unable to read file ${this.kwik.directoryPath}${this.tableName}/${file.name}`,
           error,
         );
@@ -151,7 +151,7 @@ export class KwikTable<T> {
           }
         }
       } catch (error) {
-        this.kwik.error(
+        await this.kwik.error(
           `[Kwik Error: findOne]: Unable to read file ${this.kwik.directoryPath}${this.tableName}/${file.name}`,
           error,
         );
@@ -164,7 +164,7 @@ export class KwikTable<T> {
     return await this.saveFile(id, data);
   }
 
-  /** Updates a documents data. If this document does not exist, it will create the document. */
+  /** Updates a documents' data. If this document does not exist, it will create the document. */
   async update(id: string, data: Partial<T> = {}) {
     const existing = await this.get(id) || {};
     return this.set(id, existing ? { ...existing, ...data } : data);
@@ -197,7 +197,7 @@ export class KwikTable<T> {
           }
         }
       } catch (error) {
-        this.kwik.error(
+        await this.kwik.error(
           `[Kwik Error: updateOne]: Unable to read file ${this.kwik.directoryPath}${this.tableName}/${file.name}`,
           error,
         );
@@ -245,7 +245,7 @@ export class KwikTable<T> {
           }
         }
       } catch (error) {
-        this.kwik.error(
+        await this.kwik.error(
           `[Kwik Error: deleteMany]: Unable to read file ${this.kwik.directoryPath}${this.tableName}/${file.name}`,
           error,
         );
@@ -267,17 +267,17 @@ export class KwikTable<T> {
         const decodedData = await this.get(name);
         if (decodedData) {
           if (typeof filter === "function") {
-            this.delete(name);
+            await this.delete(name);
           } else {
             const invalid = Object.keys(filter).find((key) =>
               (decodedData as Record<string, unknown>)[key] !== // deno-lint-ignore no-explicit-any
                 (filter as any)[key]
             );
-            if (!invalid) this.delete(name);
+            if (!invalid) await this.delete(name);
           }
         }
       } catch (error) {
-        this.kwik.error(
+        await this.kwik.error(
           `[Kwik Error: deleteMany]: Unable to read file ${this.kwik.directoryPath}${this.tableName}/${file.name}`,
           error,
         );
