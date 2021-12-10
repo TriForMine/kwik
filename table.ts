@@ -45,7 +45,7 @@ export class KwikTable<T> {
       );
       return msgpack.decode(data, {
         extensionCodec: this.kwik.msgpackExtensionCodec,
-      });
+      }) as T;
     } catch (error) {
       await this.kwik.error(
         `[Kwik: get] Unable to read file file://${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
@@ -81,7 +81,7 @@ export class KwikTable<T> {
 
     return data;
   }
-  
+
   /** Get all documents from a table that match a filter */
   async findMany(
     filter: Record<string, unknown> | ((value: T) => boolean),
@@ -169,7 +169,7 @@ export class KwikTable<T> {
     const existing = await this.get(id) || {};
     return this.set(id, existing ? { ...existing, ...data } : data);
   }
-  
+
   /** Gets the first document from a table that match a filter */
   async updateOne(
     filter: Partial<T> | ((value: T) => boolean),
@@ -220,7 +220,7 @@ export class KwikTable<T> {
       return false;
     }
   }
-  
+
     /** Deletes one document in a table that match a filter */
   async deleteOne(filter: Partial<T> | ((value: T) => boolean)) {
     const files = Deno.readDirSync(
