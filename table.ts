@@ -189,9 +189,8 @@ export class KwikTable<T> {
           if (typeof filter === "function") {
             if (filter(decodedData)) return this.update(name, data);
           } else {
-            // deno-lint-ignore no-explicit-any
             const invalid = Object.keys(filter).find((key) =>
-              (decodedData as Record<string, unknown>)[key] !==
+              (decodedData as Record<string, unknown>)[key] !== // deno-lint-ignore no-explicit-any
                 (filter as any)[key]
             );
             if (!invalid) return this.update(name, data);
@@ -238,9 +237,8 @@ export class KwikTable<T> {
           if (typeof filter === "function") {
             return this.delete(name);
           } else {
-            // deno-lint-ignore no-explicit-any
             const invalid = Object.keys(filter).find((key) =>
-              (decodedData as Record<string, unknown>)[key] !==
+              (decodedData as Record<string, unknown>)[key] !== // deno-lint-ignore no-explicit-any
                 (filter as any)[key]
             );
             if (!invalid) return this.delete(name);
@@ -271,9 +269,8 @@ export class KwikTable<T> {
           if (typeof filter === "function") {
             this.delete(name);
           } else {
-            // deno-lint-ignore no-explicit-any
             const invalid = Object.keys(filter).find((key) =>
-              (decodedData as Record<string, unknown>)[key] !==
+              (decodedData as Record<string, unknown>)[key] !== // deno-lint-ignore no-explicit-any
                 (filter as any)[key]
             );
             if (!invalid) this.delete(name);
