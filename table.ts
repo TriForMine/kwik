@@ -112,7 +112,7 @@ export class KwikTable<T> {
             if (filter(decodedData)) data.set(name, decodedData);
           } else {
             const invalid = Object.keys(filter).find((key) =>
-              (decodedData as Record<string, unknown>)[key] !== filter[key]
+              (decodedData as unknown as Record<string, unknown>)[key] !== filter[key]
             );
             if (!invalid) data.set(name, decodedData);
           }
@@ -145,7 +145,7 @@ export class KwikTable<T> {
             if (filter(decodedData)) return decodedData;
           } else {
             const invalid = Object.keys(filter).find((key) =>
-              (decodedData as Record<string, unknown>)[key] !== filter[key]
+              (decodedData as unknown as Record<string, unknown>)[key] !== filter[key]
             );
             if (!invalid) return decodedData;
           }
@@ -190,7 +190,7 @@ export class KwikTable<T> {
             if (filter(decodedData)) return this.update(name, data);
           } else {
             const invalid = Object.keys(filter).find((key) =>
-              (decodedData as Record<string, unknown>)[key] !== // deno-lint-ignore no-explicit-any
+              (decodedData as unknown as Record<string, unknown>)[key] !== // deno-lint-ignore no-explicit-any
                 (filter as any)[key]
             );
             if (!invalid) return this.update(name, data);
@@ -238,7 +238,7 @@ export class KwikTable<T> {
             return this.delete(name);
           } else {
             const invalid = Object.keys(filter).find((key) =>
-              (decodedData as Record<string, unknown>)[key] !== // deno-lint-ignore no-explicit-any
+              (decodedData as unknown as Record<string, unknown>)[key] !== // deno-lint-ignore no-explicit-any
                 (filter as any)[key]
             );
             if (!invalid) return this.delete(name);
@@ -270,7 +270,7 @@ export class KwikTable<T> {
             await this.delete(name);
           } else {
             const invalid = Object.keys(filter).find((key) =>
-              (decodedData as Record<string, unknown>)[key] !== // deno-lint-ignore no-explicit-any
+              (decodedData as unknown as Record<string, unknown>)[key] !== // deno-lint-ignore no-explicit-any
                 (filter as any)[key]
             );
             if (!invalid) await this.delete(name);
