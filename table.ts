@@ -112,7 +112,8 @@ export class KwikTable<T> {
             if (filter(decodedData)) data.set(name, decodedData);
           } else {
             const invalid = Object.keys(filter).find((key) =>
-              (decodedData as unknown as Record<string, unknown>)[key] !== filter[key]
+              (decodedData as unknown as Record<string, unknown>)[key] !==
+                filter[key]
             );
             if (!invalid) data.set(name, decodedData);
           }
@@ -145,7 +146,8 @@ export class KwikTable<T> {
             if (filter(decodedData)) return decodedData;
           } else {
             const invalid = Object.keys(filter).find((key) =>
-              (decodedData as unknown as Record<string, unknown>)[key] !== filter[key]
+              (decodedData as unknown as Record<string, unknown>)[key] !==
+                filter[key]
             );
             if (!invalid) return decodedData;
           }
