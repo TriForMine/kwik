@@ -17,7 +17,7 @@ slower and might have issues.
 # Examples
 
 ```ts
-import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.2.1/mod.ts";
+import { Kwik, KwikTable } from "https://deno.land/x/kwik@v1.2.3/mod.ts";
 
 interface UserSchema {
   username: string;
@@ -53,7 +53,7 @@ import {
   encode,
   Kwik,
   KwikTable,
-} from "https://deno.land/x/kwik@v1.2.1/mod.ts";
+} from "https://deno.land/x/kwik@v1.2.3/mod.ts";
 
 const kwik = new Kwik();
 const table = new KwikTable(kwik, "table");
@@ -87,7 +87,7 @@ import {
   encode,
   Kwik,
   KwikTable,
-} from "https://deno.land/x/kwik@v1.2.1/mod.ts";
+} from "https://deno.land/x/kwik@v1.2.3/mod.ts";
 
 const kwik = new Kwik();
 const table = new KwikTable(kwik, "table");
