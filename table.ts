@@ -22,7 +22,7 @@ export class KwikTable<T> {
 
   /** Create a document with the provided data */
   async create(id: string, data: Partial<T> = {}) {
-    // Even if has is deprecated, deno doesn't provide any workaround for this.
+    // Deno doesn't provide any workaround for this.
     if (await this.has(id)) {
       return this.kwik.error(
         `[Kwik: create] Cannot create already existing file file://${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
@@ -32,7 +32,7 @@ export class KwikTable<T> {
   }
 
   /** Check if a document exists
-   * @deprecated Checking the state of a file before using it causes a race condition. Perform the actual operation directly instead.
+   * @remarks This method only checks for the existence of the file, and can provoke a race condition. If you can, run the actual operation instead, and catch for an error.
    * @returns Whether or not the document exists.
    */
   async has(id: string): Promise<boolean> {
