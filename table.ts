@@ -1,4 +1,4 @@
-import { exists, msgpack } from "./deps.ts";
+import { msgpack } from "./deps.ts";
 import { Kwik } from "./kwik.ts";
 
 export class KwikTable<T> {
@@ -22,6 +22,7 @@ export class KwikTable<T> {
 
   /** Create a document with the provided data */
   async create(id: string, data: Partial<T> = {}) {
+    // Even if has is deprecated, deno doesn't provide any workaround for this.
     if (await this.has(id)) {
       return this.kwik.error(
         `[Kwik: create] Cannot create already existing file file://${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
@@ -30,14 +31,29 @@ export class KwikTable<T> {
     return await this.saveFile(id, data);
   }
 
-  /** Check if a document exists */
+  /** Check if a document exists
+   * @deprecated Checking the state of a file before using it causes a race condition. Perform the actual operation directly instead.
+   * @returns Whether or not the document exists.
+   */
   async has(id: string): Promise<boolean> {
-    return await exists(
-      `${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
-    );
+    try {
+      const info = await Deno.lstat(
+          `${this.kwik.directoryPath}${this.tableName}/${id}.kwik`,
+      );
+
+      return info.isFile;
+    } catch (err) {
+      if (err instanceof Deno.errors.NotFound) {
+        return false;
+      }
+
+      throw err;
+    }
   }
 
-  /** Get a document from the table. */
+  /** Get a document from the table.
+   * @returns The document data or undefined if it doesn't exist.
+   */
   async get(id: string): Promise<T | undefined> {
     try {
       const data = await Deno.readFile(
@@ -54,7 +70,9 @@ export class KwikTable<T> {
     }
   }
 
-  /** Get all documents of the table. */
+  /** Get all documents of the table.
+   * @returns A map of all documents with their corresponding data.
+   */
   async getAll(): Promise<Map<string, T>> {
     const data = new Map<string, T>();
 
